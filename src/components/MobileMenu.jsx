@@ -1,6 +1,7 @@
 import { Heart, ShoppingCart, X } from 'lucide-react';
+import SearchBar from './SearchBar';
 
-const MobileMenu = ({ isOpen, onClose }) => {
+const MobileMenu = ({ isOpen, onClose, onSearch }) => {
   return (
     <>
       {/* Overlay */}
@@ -26,6 +27,11 @@ const MobileMenu = ({ isOpen, onClose }) => {
           </button>
 
           <div className="mt-8 space-y-6">
+            {/* Search Bar in Mobile Menu */}
+            <div className="px-4">
+              <SearchBar onSearch={onSearch} />
+            </div>
+
             <button className="w-full text-left px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md">
               Browse
             </button>

@@ -3,15 +3,21 @@ import { Heart, ShoppingCart } from 'lucide-react';
 import { useAuth } from '../../src/context/AuthContext';
 import SearchBar from './SearchBar';
 import AuthModal from './auth/AuthModal';
+import MobileMenu from './MobileMenu';
 
 const Navbar = ({ onSearch }) => {
   const { user, signout } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [authMode, setAuthMode] = useState('signin');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleAuthClick = (mode) => {
     setAuthMode(mode);
     setShowModal(true);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
@@ -28,14 +34,21 @@ const Navbar = ({ onSearch }) => {
                 Browse
               </button>
             </div>
-            <SearchBar onSearch={onSearch} />
+            {/* Search Bar (hidden on mobile) */}
+            <div className="hidden md:block">
+              <SearchBar onSearch={onSearch} />
+            </div>
           </div>
 
           {/* Right side */}
           <div className="flex items-center space-x-4">
-            <Heart className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
-            <ShoppingCart className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
-            
+            {/* Heart and Shopping Cart Icons (hidden on mobile) */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Heart className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
+              <ShoppingCart className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
+            </div>
+
+            {/* User Auth Buttons */}
             {user ? (
               <>
                 <span className="text-gray-600">Welcome, {user.username}</span>
@@ -62,9 +75,26 @@ const Navbar = ({ onSearch }) => {
                 </button>
               </>
             )}
+
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={toggleMobileMenu}
+              className="md:hidden text-gray-600 hover:text-gray-900"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <MobileMenu 
+        isOpen={isMobileMenuOpen} 
+        onClose={toggleMobileMenu} 
+        onSearch={onSearch} 
+      />
 
       <AuthModal 
         isOpen={showModal}
